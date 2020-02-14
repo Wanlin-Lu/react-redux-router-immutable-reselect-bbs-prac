@@ -8,6 +8,7 @@ BBS-App.xmind
 
 # testing
 /coverage
+/src/state.js
 
 # production
 /build
