@@ -41,7 +41,7 @@
 * [ ] **module design**
   * [x] app
   * [x] auth
-  * [ ] posts
+  * [x] posts
   * [ ] comments
   * [ ] users
   * [ ] ui
