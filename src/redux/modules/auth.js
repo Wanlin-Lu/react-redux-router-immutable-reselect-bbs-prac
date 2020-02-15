@@ -22,7 +22,7 @@ export const actions = {
 		return dispatch => {
 			dispatch(appActions.startRequest())
 			const params = { username, userId }
-			return fetch(url.login(), params).then( data => {
+			return post(url.login(), params).then( data => {
 				dispatch(appActions.finishRequest())
 				if (!data.error) {
 					dispatch(actions.setLoginInfo(data.userId, username));
