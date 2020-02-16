@@ -42,7 +42,7 @@
   * [x] app
   * [x] auth
   * [x] posts
-  * [ ] comments
+  * [x] comments
   * [ ] users
   * [ ] ui
   * [ ] index
