@@ -26,10 +26,10 @@ function encodeFilter(filter) {
 
 export default {
 	login: () => `/user/login`,
-	getPostList: () => `/post?filter=${encodeURIComponent(postListFilter)}`,
-	getPostById: id => `/post?filter=${encodeURIComponent(postByIdFilter(id))}`,
+	getPostList: () => `/post?filter=${encodeFilter(postListFilter)}`,
+	getPostById: id => `/post?filter=${encodeFilter(postByIdFilter(id))}`,
 	createPost: () => `/post`,
 	updatePost: id => `/post/${id}`,
-	getCommentList: postId => `/comment?filter=${encodeURIComponent(commentListFilter(postId))}`,
+	getCommentList: postId => `/comment?filter=${encodeFilter(commentListFilter(postId))}`,
 	createComment: () => `/comment`
 }

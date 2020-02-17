@@ -21,7 +21,7 @@ export const actions = {
 	login: (username, password) => {
 		return dispatch => {
 			dispatch(appActions.startRequest())
-			const params = { username, userId }
+			const params = { username, password }
 			return post(url.login(), params).then( data => {
 				dispatch(appActions.finishRequest())
 				if (!data.error) {

@@ -44,7 +44,7 @@ export const actions = {
 					dispatch(appActions.finishRequest())
 					if (!data.error && data.length === 1) {
 						const { post, author } = convertPostToPlain(data[0])
-						dispatch fetchPostByIdSuccess(post, author)
+						dispatch(fetchPostByIdSuccess(post, author))
 					} else {
 						dispatch(appActions.setError(data.error))
 					}

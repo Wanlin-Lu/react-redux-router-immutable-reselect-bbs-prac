@@ -2,8 +2,8 @@ import { combineReducers } from 'redux'
 import app from './app'
 import auth from './auth'
 import ui from './ui'
-import posts, { getPostIds, getPostById } from './post'
-import comments, { getCommentById, getCommentIdsByPost } from './comment'
+import posts, { getPostIds, getPostById } from './posts'
+import comments, { getCommentById, getCommentIdsByPost } from './comments'
 import users, { getUserById } from './users'
 
 const rootReducer = combineReducers({
@@ -34,7 +34,7 @@ export const getCommentsWithAuthors = (state, postId) => {
 	const commentIds = getCommentIdsByPost(state, postId)
 	if (commentIds) {
 		return commentIds.map( id => {
-			const comment = getCommentById(state, id)
+			let comment = getCommentById(state, id)
 			return comment = { ...comment, author: getUserById(state, comment.author) }
 		})
 	} else {

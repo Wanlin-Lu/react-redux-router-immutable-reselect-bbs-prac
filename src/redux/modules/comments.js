@@ -48,6 +48,7 @@ export const actions = {
 		}
 	}
 }
+
 // thunk action success
 const fetchCommentsSuccess = (comments, commentIds, users, postId) => ({
 	type: types.FETCH_COMMENTS,
@@ -57,7 +58,7 @@ const fetchCommentsSuccess = (comments, commentIds, users, postId) => ({
 	postId 
 })
 
-const fetchCommentSuccess = (postId, comment) => ({
+const createCommentSuccess = (postId, comment) => ({
 	type: types.CREATE_COMMENT,
 	postId,
 	comment 
@@ -66,6 +67,7 @@ const fetchCommentSuccess = (postId, comment) => ({
 // should ?
 const shouldFetchComments = (state, postId) => {
 	return !state.comments.byPost[postId]
+}
 
 // convert RawData To Plain
 const convertCommentsToPlain = comments => {
@@ -82,7 +84,7 @@ const convertCommentsToPlain = comments => {
 	return {
 		comments: plainComments,
 		commentIds: commentIds,
-		users: authorsById;
+		users: authorsById
 	}
 }
 
@@ -117,7 +119,7 @@ const reducer = combineReducers({
 	byId 
 })
 
-export default reducer 
+export default reducer
 
 // specific methods
 export const getCommentIdsByPost = (state, postId) => state.comments.byPost[postId]

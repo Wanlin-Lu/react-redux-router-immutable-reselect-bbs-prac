@@ -30,14 +30,14 @@ export const actions = {
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
 		case types.OPEN_ADD_DIALOG:
-			return { ..state, addDialogOpen: true }
+			return { ...state, addDialogOpen: true }
 		case types.CLOSE_ADD_DIALOG:
-			return { ..state, addDialogOpen: false }
+			return { ...state, addDialogOpen: false }
 		case types.OPEN_EDIT_DIALOG:
-			return { ..state, editDialogOpen: true }
+			return { ...state, editDialogOpen: true }
 		case types.CLOSE_EDIT_DIALOG:
 		case postTypes.UPDATE_POST:
-			return { ..state, editDialogOpen: false }
+			return { ...state, editDialogOpen: false }
 		default:
 			return state 
 	}
