@@ -39,9 +39,9 @@ export const actions = {
 
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
-		case types.ADD_USER:
+		case types.LOGIN:
 			return { ...state, username: action.username, userId: action.userId }
-		case types.REMOVE_USER:
+		case types.LOGOUT:
 			return { ...state, username: null, userId: null }
 		default:
 			return state
