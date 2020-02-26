@@ -20,7 +20,7 @@ export const types = {
 // start thunk actions
 export const actions = {
 	fetchAllPosts: () => {
-		return (getState, dispatch) => {
+		return (dispatch, getState) => {
 			if (shouldFetchAllPosts(getState())) {
 				dispatch(appActions.startRequest())
 				return get(url.getPostList()).then( data => {
@@ -43,6 +43,7 @@ export const actions = {
 				return get(url.getPostById(postId)).then( data => {
 					dispatch(appActions.finishRequest())
 					if (!data.error && data.length === 1) {
+						console.log(data)
 						const { post, author } = convertPostToPlain(data[0])
 						dispatch(fetchPostByIdSuccess(post, author))
 					} else {
@@ -129,6 +130,7 @@ const convertPostsToPlain = posts => {
 	let postIds = []
 	let authorsById = {}
 	posts.forEach(item => {
+		item = item.author ? item : { ...item, author:{id: 123, username: 'none'}}
 		postsById[item.id] = { ...item, author: item.author.id }
 		postIds.push(item.id)
 		if (!authorsById[item.author.id]) {
