@@ -9,7 +9,7 @@ const reducer = (state = initialState, action) => {
 		case commentTypes.FETCH_COMMENTS:
 			return { ...state, ...action.users }
 		case postTypes.FETCH_POST:
-			return { ...state, [action.userId]: action.user }
+			return { ...state, [action.user.id]: action.user }
 		default:
 			return state
 	}

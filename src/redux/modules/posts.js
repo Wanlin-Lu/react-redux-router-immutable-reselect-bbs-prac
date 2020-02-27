@@ -37,21 +37,20 @@ export const actions = {
 	},
 
 	fetchPost: postId => {
-		return (getState, dispatch) => {
-			if (shouldFetchPost(getState(), postId)) {
-				dispatch(appActions.startRequest())
-				return get(url.getPostById(postId)).then( data => {
-					dispatch(appActions.finishRequest())
-					if (!data.error && data.length === 1) {
-						console.log(data)
-						const { post, author } = convertPostToPlain(data[0])
-						dispatch(fetchPostByIdSuccess(post, author))
-					} else {
-						dispatch(appActions.setError(data.error))
-					}
-				})
-			}
-		}
+		return (dispatch, getState) => {
+      if (shouldFetchPost(getState(), postId)) {
+        dispatch(appActions.startRequest());
+        return get(url.getPostById(postId)).then(data => {
+          dispatch(appActions.finishRequest());
+          if (!data.error && data.length === 1) {
+            const { post, author } = convertPostToPlain(data[0]);
+            dispatch(fetchPostByIdSuccess(post, author));
+          } else {
+            dispatch(appActions.setError(data.error));
+          }
+        });
+      }
+    };
 	},
 
 	createPost: (title,content) => {
@@ -145,6 +144,7 @@ const convertPostsToPlain = posts => {
 }
 
 const convertPostToPlain = post => {
+	post = post.author ? post : { ...post, author: { id: 123, username: "yiming" } };
 	const plainPost = { ...post, author: post.author.id }
 	const author = { ...post.author }
 	return {

@@ -18,20 +18,22 @@ export const types = {
 // thunk actions
 export const actions = {
 	fetchComments: postId => {
-		return (getState,dispatch) => {
-			if (shouldFetchComments(getState(), postId)) {
-				dispatch(appActions.startRequest())
-				return get(url.getCommentList(postId)).then(data => {
-					dispatch(appActions.finishRequest())
-					if (!data.error) {
-						const { commentIds, comments, users } = convertCommentsToPlain(data)
-						dispatch(fetchCommentsSuccess(commentIds, comments, users, postId))
-					} else {
-						dispatch(appActions.setError(data.error))
-					}
-				})
-			}
-		}
+		return (dispatch, getState) => {
+      if (shouldFetchComments(getState(), postId)) {
+        dispatch(appActions.startRequest());
+        return get(url.getCommentList(postId)).then(data => {
+          dispatch(appActions.finishRequest());
+          if (!data.error) {
+            const { commentIds, comments, users } = convertCommentsToPlain(
+              data
+            );
+            dispatch(fetchCommentsSuccess(commentIds, comments, users, postId));
+          } else {
+            dispatch(appActions.setError(data.error));
+          }
+        });
+      }
+    };
 	},
 
 	createComment: comment => {
@@ -50,13 +52,13 @@ export const actions = {
 }
 
 // thunk action success
-const fetchCommentsSuccess = (comments, commentIds, users, postId) => ({
-	type: types.FETCH_COMMENTS,
-	comments,
-	commentIds,
-	users,
-	postId 
-})
+const fetchCommentsSuccess = (commentIds, comments, users, postId) => ({
+  type: types.FETCH_COMMENTS,
+  comments,
+  commentIds,
+  users,
+  postId
+});
 
 const createCommentSuccess = (postId, comment) => ({
 	type: types.CREATE_COMMENT,
@@ -92,7 +94,7 @@ const convertCommentsToPlain = comments => {
 const byPost = (state = initialState.byPost, action) => {
 	switch(action.type) {
 		case types.FETCH_COMMENTS:
-			return { ...state, [action.postId]:actions.commentIds }
+			return { ...state, [action.postId]: action.commentIds }
 		case types.CREATE_COMMENT:
 			return { 
 				...state,
@@ -106,7 +108,7 @@ const byPost = (state = initialState.byPost, action) => {
 const byId = (state = initialState.byId, action) => {
 	switch(action.type) {
 		case types.FETCH_COMMENTS:
-			return { ...state, ...actions.comments }
+			return { ...state, ...action.comments }
 		case types.CREATE_COMMENT:
 			return { ...state, [action.comment.id]: action.comment }
 		default:
