@@ -42,6 +42,7 @@ class Post extends Component {
       content: content
     }
     this.props.createComment(comment)
+    this.props.closeEditDialog()
   }
 
   render () {
@@ -56,7 +57,7 @@ class Post extends Component {
       <div className="post">
         {isEditDialogOpen ? (
           <PostEditor
-            Post={post}
+            post={post}
             onSave={this.handlePostSave}
             onCancel={this.handlePostCancel}
           />

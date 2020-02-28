@@ -17,6 +17,7 @@ class PostList extends Component {
 
     handleSave = data => {
       this.props.createPost(data.title, data.content)
+      this.props.closeAddDialog()
     }
     handleCancel = () => {
       this.props.closeAddDialog()

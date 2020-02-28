@@ -28,9 +28,9 @@ export const actions = {
 
 const reducers = (state = initialState, action) => {
 	switch(action.type) {
-		case types.START_REQEST:
+		case types.START_REQUEST:
 			return { ...state, requestQuantity: state.requestQuantity + 1 }
-		case types.FINISH_REQEST:
+		case types.FINISH_REQUEST:
 			return { ...state, requestQuantity: state.requestQuantity - 1 }
 		case types.SET_ERROR:
 			return { ...state, error: action.error }
