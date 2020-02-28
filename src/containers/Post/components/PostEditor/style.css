@@ -1,7 +1,11 @@
-.post {
-  width: 900px;
-  min-height: 900px;
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 1px rgba(0, 0, 0, 0.1);
+.postEditor input {
   margin: 10px auto;
-  padding: 20px;
+  width: 100%;
+  line-height: 1.5em;
+}
+
+.postEditor textarea {
+  margin-bottom: 10px;
+  height: 100px;
+  width: 100%;
 }
