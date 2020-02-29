@@ -1,7 +1,9 @@
-const initialState = {
+import Immutable from 'immutable'
+
+const initialState = Immutable.fromJS({
 	requestQuantity: 0,
 	error: null
-}
+})
 
 export const types = {
 	START_REQUEST: "APP/START_REQUEST",
@@ -29,13 +31,13 @@ export const actions = {
 const reducers = (state = initialState, action) => {
 	switch(action.type) {
 		case types.START_REQUEST:
-			return { ...state, requestQuantity: state.requestQuantity + 1 }
+			return state.merge({ requestQuantity: state.get("requestQuantity") + 1 })
 		case types.FINISH_REQUEST:
-			return { ...state, requestQuantity: state.requestQuantity - 1 }
+			return state.merge({ requestQuantity: state.get("requestQuantity") - 1 });
 		case types.SET_ERROR:
-			return { ...state, error: action.error }
+			return state.merge({ error: action.error })
 		case types.REMOVE_ERROR:
-			return { ...state, error: null }
+			return state.merge({ error: null })
 		default:
 			return state 
 	}
@@ -44,9 +46,9 @@ const reducers = (state = initialState, action) => {
 export default reducers 
 
 export const getRequestQuantity = state => {
-	return state.app.requestQuantity
+	return state.getIn(["app", "requestQuantity"]);
 }
 
 export const getError = state => {
-	return state.app.error 
+	return state.getIn(["app", "error"])
 }

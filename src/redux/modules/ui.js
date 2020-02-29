@@ -1,9 +1,10 @@
+import Immutable from 'immutable'
 import { types as postTypes } from './posts'
 
-const initialState = {
+const initialState = Immutable.fromJS({
 	addDialogOpen: false,
 	createDialogOpen: false 
-}
+})
 
 export const types = {
 	OPEN_ADD_DIALOG: "UI/OPEN_ADD_DIALOG",
@@ -30,14 +31,14 @@ export const actions = {
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
 		case types.OPEN_ADD_DIALOG:
-			return { ...state, addDialogOpen: true }
+			return state.set('addDialogOpen', true)
 		case types.CLOSE_ADD_DIALOG:
-			return { ...state, addDialogOpen: false }
+			return state.set('addDialogOpen', false)
 		case types.OPEN_EDIT_DIALOG:
-			return { ...state, editDialogOpen: true }
+			return state.set('editDialogOpen', true)
 		case types.CLOSE_EDIT_DIALOG:
 		case postTypes.UPDATE_POST:
-			return { ...state, editDialogOpen: false }
+			return state.set('editDialogOpen', false)
 		default:
 			return state 
 	}
@@ -45,6 +46,6 @@ const reducer = (state = initialState, action) => {
 
 export default reducer
 
-export const isAddDialogOpen = state => state.ui.addDialogOpen
+export const isAddDialogOpen = state => state.getIn(['ui', 'addDialogOpen'])
 
-export const isEditDialogOpen = state => state.ui.editDialogOpen
+export const isEditDialogOpen = state => state.getIn(['ui', 'editDialogOpen'])

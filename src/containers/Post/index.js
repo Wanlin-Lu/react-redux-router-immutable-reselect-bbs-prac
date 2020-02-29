@@ -15,7 +15,6 @@ class Post extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.id 
-    console.log("iiiii",postId)
     this.props.fetchPost(postId)
     this.props.fetchComments(postId)
   }
@@ -50,27 +49,27 @@ class Post extends Component {
     if (!post) {
       return null
     }
-    console.log("postINPostRender:",post)
-    console.log("post.auther.id INPostRender:", post.author);
-    const editable = user.userId === post.author.id
+    const rawPost = post.toJS()
+    const rawComments = comments.toJS()
+    const editable = user.get('userId') === rawPost.author.id
     return (
       <div className="post">
         {isEditDialogOpen ? (
           <PostEditor
-            post={post}
+            post={rawPost}
             onSave={this.handlePostSave}
             onCancel={this.handlePostCancel}
           />
         ) : (
           <PostView
-            post={post}
+            post={rawPost}
             editable={editable}
             onEditClick={this.handleEditClick}
           />
         )}
         <CommentList
-          comments={comments}
-          editable={Boolean(user.userId)}
+          comments={rawComments}
+          editable={Boolean(user.get('userId'))}
           onSubmit={this.handleCommentSubmit}
         />
       </div>
@@ -79,12 +78,6 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  console.log("params.id,from Post", props.match.params.id);
-  console.log("PostinPost:", getPostDetail(state, props.match.params.id));
-  console.log(
-    "comments in Post:",
-    getCommentsWithAuthors(state, props.match.params.id)
-  );
   return {
     user: getLoggedUser(state),
     post: getPostDetail(state, props.match.params.id),

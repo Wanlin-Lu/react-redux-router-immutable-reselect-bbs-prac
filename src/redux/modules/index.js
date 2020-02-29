@@ -1,4 +1,5 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux-immutable'
+import Immutable from "immutable"
 import app from './app'
 import auth from './auth'
 import ui from './ui'
@@ -21,13 +22,14 @@ export const getPostListWithAuthors = state => {
 	const postIds = getPostIds(state)
 	return postIds.map( id => {
 		const post = getPostById(state, id)
-		return { ...post, author: getUserById(state, post.author) }
+		console.log(post)
+		return post.merge({ author: getUserById(state, post.get('author')) })
 	})
 }
 
 export const getPostDetail = (state, id) => {
 	const post = getPostById(state, id)
-	return post ? { ...post, author: getUserById(state, post.author) } : null 
+	return post ? post.merge({ author: getUserById(state, post.get('author')) }) : null 
 }
 
 export const getCommentsWithAuthors = (state, postId) => {
@@ -35,9 +37,9 @@ export const getCommentsWithAuthors = (state, postId) => {
 	if (commentIds) {
 		return commentIds.map( id => {
 			let comment = getCommentById(state, id)
-			return comment = { ...comment, author: getUserById(state, comment.author) }
+			return comment.merge({ author: getUserById(state, comment.get('author')) })
 		})
 	} else {
-		return []
+		return Immutable.List()
 	}
 }

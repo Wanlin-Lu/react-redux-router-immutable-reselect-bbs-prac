@@ -1,11 +1,12 @@
+import Immutable from 'immutable'
 import { post } from '../../utils/request'
 import url from '../../utils/url'
 import { actions as appActions } from './app'
 
-const initialState = {
+const initialState = Immutable.fromJS({
 	username: null,
 	userId: null 
-}
+})
 
 export const types = {
 	LOGIN: "AUTH/LOGIN",
@@ -40,9 +41,9 @@ export const actions = {
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
 		case types.LOGIN:
-			return { ...state, username: action.username, userId: action.userId }
+			return state.merge({ username: action.username, userId: action.userId })
 		case types.LOGOUT:
-			return { ...state, username: null, userId: null }
+			return state.merge({ username: null, userId: null })
 		default:
 			return state
 	}
@@ -50,4 +51,4 @@ const reducer = (state = initialState, action) => {
 
 export default reducer 
 
-export const getLoggedUser = state => state.auth
+export const getLoggedUser = state => state.get("auth")

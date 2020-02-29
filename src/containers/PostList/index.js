@@ -28,11 +28,12 @@ class PostList extends Component {
 
     render() {
         const { user, posts, isAddDialogOpen } = this.props
+        const rawPosts = posts.toJS()
         return (
             <div className="postList">
               <div>
                 <h2>话题列表呢</h2> 
-                {user['userId'] ? (
+                {user.get('userId') ? (
                   <button onClick={this.handleNewPost}>
                     发帖
                   </button>
@@ -44,7 +45,7 @@ class PostList extends Component {
                   onCancel={this.handleCancel}
                 />
               ) : null}
-              <PostsView posts={posts} />     
+              <PostsView posts={rawPosts} />     
             </div>
         )
     }

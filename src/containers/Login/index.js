@@ -16,7 +16,7 @@ class Login extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const isLoggedIn = !this.props.user.userId && nextProps.user.userId 
+		const isLoggedIn = !this.props.user.get('userId') && nextProps.user.get('userId') 
 		if (isLoggedIn) {
 			this.setState({
 				redirectToReferrer: true 

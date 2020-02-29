@@ -32,7 +32,9 @@ class Home extends Component {
 	}
 
 	handleBeforeUnload = () => {
-		const { userId, username } = this.props.user
+		const user = this.props.user 
+		const userId = user.get('userId')
+		const username = user.get('username')
 		if (userId && username) {
 			sessionStorage.setItem('userId', userId)
 			sessionStorage.setItem('username', username)
@@ -44,7 +46,7 @@ class Home extends Component {
 	}
 	render() {
 		const { match, location, user } = this.props 
-		const username = user && user.username ? user.username : ""
+		const username = user && user.get('username') ? user.get('username') : ""
 		return (
 			<div>
 				<Header

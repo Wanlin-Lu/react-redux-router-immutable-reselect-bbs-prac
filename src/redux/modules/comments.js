@@ -1,13 +1,14 @@
-import { combineReducers } from 'redux'
+import Immutable from 'immutable'
+import { combineReducers } from 'redux-immutable'
 import { actions as appActions } from './app'
 import { get, post } from '../../utils/request'
 import url from '../../utils/url'
 
 // initialstate
-const initialState = {
+const initialState = Immutable.fromJS({
 	byPost: {},
 	byId: {}
-}
+})
 
 // action types
 export const types = {
@@ -68,7 +69,8 @@ const createCommentSuccess = (postId, comment) => ({
 
 // should ?
 const shouldFetchComments = (state, postId) => {
-	return !state.comments.byPost[postId]
+	const commentIds = state.getIn(["comments", "byPost", postId])
+	return !commentIds
 }
 
 // convert RawData To Plain
@@ -91,26 +93,23 @@ const convertCommentsToPlain = comments => {
 }
 
 // reducers
-const byPost = (state = initialState.byPost, action) => {
+const byPost = (state = initialState.get("byPost"), action) => {
 	switch(action.type) {
 		case types.FETCH_COMMENTS:
-			return { ...state, [action.postId]: action.commentIds }
+			return state.merge({ [action.postId]: action.commentIds })
 		case types.CREATE_COMMENT:
-			return { 
-				...state,
-				[action.postId]: [...state[action.postId], action.comment.id]
-			}
+			return state.set(action.postId,state.get(action.postId).unshift(action.comment.id))
 		default:
 			return state 
 	}
 }
 
-const byId = (state = initialState.byId, action) => {
+const byId = (state = initialState.get("byId"), action) => {
 	switch(action.type) {
 		case types.FETCH_COMMENTS:
-			return { ...state, ...action.comments }
+			return state.merge(action.comments)
 		case types.CREATE_COMMENT:
-			return { ...state, [action.comment.id]: action.comment }
+			return state.merge({ [action.comment.id]: action.comment })
 		default:
 			return state 
 	}
@@ -124,8 +123,8 @@ const reducer = combineReducers({
 export default reducer
 
 // specific methods
-export const getCommentIdsByPost = (state, postId) => state.comments.byPost[postId]
+export const getCommentIdsByPost = (state, postId) => state.getIn(["comments", "byPost", postId])
 
-export const getComments = state => state.comment.byId 
+export const getComments = state => state.getIn(["comments", "byId"]) 
 
-export const getCommentById = (state, id) => state.comments.byId[id]
+export const getCommentById = (state, id) => state.getIn(["comments", "byId", id])

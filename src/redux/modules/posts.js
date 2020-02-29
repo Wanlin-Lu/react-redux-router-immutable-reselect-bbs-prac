@@ -1,13 +1,14 @@
-import  { combineReducers } from 'redux'
+import Immutable from 'immutable'
+import  { combineReducers } from 'redux-immutable'
 import { get, post, put } from '../../utils/request'
 import url from '../../utils/url'
 import { actions as appActions } from './app'
 
 // initialState
-const initialState = {
+const initialState = Immutable.fromJS({
 	byId: {},
 	allIds: []
-}
+})
 
 // action types
 export const types = {
@@ -116,11 +117,13 @@ const updatePostSuccess = post => ({
 
 // shouldRequest?
 const shouldFetchAllPosts = state => {
-	return !state.posts.allIds || state.posts.allIds.length === 0
+	const allIds = state.getIn(["posts", "allIds"])
+	return !allIds || allIds.size === 0
 }
 
 const shouldFetchPost = (state, postId) => {
-	return !state.posts.byId[postId] || !state.posts.byId[postId].content
+	const post = state.getIn(['posts', 'byId', postId])
+	return !post || !post.get("content")
 }
 
 // convertToPlain
@@ -129,7 +132,7 @@ const convertPostsToPlain = posts => {
 	let postIds = []
 	let authorsById = {}
 	posts.forEach(item => {
-		item = item.author ? item : { ...item, author:{id: 123, username: 'none'}}
+		item = item.author ? item : { ...item, author:{id: '123', username: 'yiming'}}
 		postsById[item.id] = { ...item, author: item.author.id }
 		postIds.push(item.id)
 		if (!authorsById[item.author.id]) {
@@ -144,7 +147,7 @@ const convertPostsToPlain = posts => {
 }
 
 const convertPostToPlain = post => {
-	post = post.author ? post : { ...post, author: { id: 123, username: "yiming" } };
+	post = post.author ? post : { ...post, author: { id: '123', username: "yiming" } };
 	const plainPost = { ...post, author: post.author.id }
 	const author = { ...post.author }
 	return {
@@ -154,28 +157,25 @@ const convertPostToPlain = post => {
 }
 
 // reducers
-const allIds = (state = initialState.allIds, action) => {
+const allIds = (state = initialState.get("allIds"), action) => {
 	switch(action.type) {
 		case types.FETCH_ALL_POST:
-			return action.postIds 
+			return Immutable.List(action.postIds);
 		case types.CREATE_POST:
-			return [ action.post.id, ...state ]
+			return state.unshift(action.post.id)
 		default:
 			return state 
 	}
 }
 
-const byId = (state = initialState.byId, action) => {
+const byId = (state = initialState.get("byId"), action) => {
 	switch(action.type) {
 		case types.FETCH_ALL_POST:
-			return action.posts
+			return state.merge(action.posts)
 		case types.FETCH_POST:
 		case types.CREATE_POST:
 		case types.UPDATE_POST:
-			return {
-				...state,
-				[action.post.id]:action.post
-			}
+			return state.merge({ [action.post.id]: action.post })
 		default:
 			return state
 	}
@@ -189,6 +189,6 @@ const reducer = combineReducers({
 export default reducer 
 
 // getSpecificStateMethods
-export const getPostList = state => state.posts.byId 
-export const getPostIds = state => state.posts.allIds
-export const getPostById = (state, id) => state.posts.byId[id]
+export const getPostList = state => state.getIn(["posts", "byId"]) 
+export const getPostIds = state => state.getIn(["posts", "allIds"])
+export const getPostById = (state, id) => state.getIn(["posts", "byId", id])
